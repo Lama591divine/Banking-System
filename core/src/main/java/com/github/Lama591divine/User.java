@@ -69,29 +69,4 @@ public class User {
             }
         }
     }
-
-    public void createAccount() {
-        accounts.add(new Account(UUID.randomUUID().toString(), this));
-    }
-
-    public Account findAccountById(String id) {
-        for (Account account : accounts) {
-            if (account.getId().equals(id)) {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    public boolean transfer(String fromAccountId, String toAccountId, User toUser, int amount) {
-        Account from = findAccountById(fromAccountId);
-        Account to = toUser.findAccountById(toAccountId);
-
-        if (from == null || to == null) {
-            System.out.println("Transfer error: one of the accounts was not found.");
-            return false;
-        }
-
-        return from.transfer(to, amount);
-    }
 }
