@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Account {
 
     private String id;
-
     private int balance;
     private User owner;
     private ArrayList<String> transactions;
