@@ -3,7 +3,20 @@ package com.github.Lama591divine;
 import com.github.Lama591divine.interfaces.AccountRepository;
 import com.github.Lama591divine.interfaces.UserRepository;
 
+/**
+ * The {@code ConsoleApp} class serves as the entry point for the bank system application.
+ * It provides a simple text-based menu for interacting with the banking system,
+ * allowing users to create accounts, manage friends, deposit, withdraw, and transfer money.
+ */
 public class ConsoleApp {
+
+    /**
+     * The main method that starts the console-based banking application.
+     * It initializes the necessary repositories and the banking system, then
+     * continuously presents a menu for user interaction until the user chooses to exit.
+     *
+     * @param args Command-line arguments (not used in this application).
+     */
     public static void main(String[] args) {
         UserRepository userRepository = new InMemmoryUserRepository();
         AccountRepository accountRepository = new InMemmoryAccountRepository();

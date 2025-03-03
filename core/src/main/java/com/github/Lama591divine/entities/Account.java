@@ -2,6 +2,10 @@ package com.github.Lama591divine.entities;
 
 import java.util.ArrayList;
 
+/**
+ * The {@code Account} class represents a bank account with an owner, balance, and transaction history.
+ * It allows deposits, withdrawals, and transfers between accounts with an applicable commission.
+ */
 public class Account {
 
     private String id;
@@ -9,6 +13,10 @@ public class Account {
     private User owner;
     private ArrayList<String> transactions;
 
+    /**
+     * @param id    the unique identifier of the account
+     * @param owner the owner of the account
+     */
     public Account(String id, User owner) {
         this.id = id;
         this.balance = 0;
@@ -32,6 +40,12 @@ public class Account {
         return owner;
     }
 
+    /**
+     * Adds the specified amount to the account balance.
+     * If the amount is not positive, a transaction error is logged.
+     *
+     * @param money the amount to be added
+     */
     public void addBalance(int money) {
         if (money > 0) {
             this.balance += money;
@@ -41,6 +55,12 @@ public class Account {
         }
     }
 
+    /**
+     * Withdraws the specified amount from the account if sufficient funds are available.
+     * If the withdrawal is not possible, a transaction error is logged.
+     *
+     * @param money the amount to be withdrawn
+     */
     public void withDraw(int money) {
         if (money > 0 && balance >= money) {
             this.balance -= money;
@@ -50,6 +70,14 @@ public class Account {
         }
     }
 
+    /**
+     * Transfers the specified amount to another account, considering commission fees.
+     * If the transfer is not possible due to insufficient funds or invalid amount, an error is logged.
+     *
+     * @param to     the recipient account
+     * @param amount the amount to transfer
+     * @return {@code true} if the transfer was successful, {@code false} otherwise
+     */
     public boolean transfer(Account to, int amount) {
         if (amount <= 0) {
             transactions.add("Transfer error: amount must be positive");
@@ -78,6 +106,13 @@ public class Account {
         return true;
     }
 
+    /**
+     * Determines the commission rate for a transfer based on the relationship between the sender and recipient.
+     *
+     * @param from the sender
+     * @param to   the recipient
+     * @return the commission rate as a decimal value
+     */
     private double getCommissionRate(User from, User to) {
         if (from.equals(to)) return 0.0;
         if (from.getFriends().contains(to)) return 0.03;

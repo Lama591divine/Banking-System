@@ -1,4 +1,7 @@
-C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\Account.java
-C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\Gender.java
-C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\HairColor.java
-C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\User.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\BankSystem.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\entities\Account.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\entities\Gender.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\entities\HairColor.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\entities\User.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\interfaces\AccountRepository.java
+C:\Users\Lama\IdeaProjects\Lama591divine\core\src\main\java\com\github\Lama591divine\interfaces\UserRepository.java

@@ -1,2 +1,2 @@
-com\github\Lama591divine\AccountRepository.class
-com\github\Lama591divine\UserRepository.class
+com\github\Lama591divine\InMemmoryAccountRepository.class
+com\github\Lama591divine\InMemmoryUserRepository.class

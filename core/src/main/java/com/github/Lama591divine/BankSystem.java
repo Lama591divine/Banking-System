@@ -10,6 +10,10 @@ import com.github.Lama591divine.interfaces.UserRepository;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * The {@code BankSystem} class provides core banking functionalities including
+ * user management, account creation, balance management, and money transactions.
+ */
 public class BankSystem {
     public final Scanner scanner;
     private final UserRepository userRepository;
@@ -21,6 +25,9 @@ public class BankSystem {
         this.accountRepository = accountRepository;
     }
 
+    /**
+     * Creates a new user by collecting necessary details from the console.
+     */
     public void createUser() {
         System.out.print("Enter login: ");
         String login = scanner.nextLine();
@@ -44,6 +51,9 @@ public class BankSystem {
         System.out.println("User created successfully!");
     }
 
+    /**
+     * Displays information about a specified user.
+     */
     public void showUserInfo() {
         System.out.print("Enter user login: ");
         String login = scanner.nextLine();
@@ -65,6 +75,9 @@ public class BankSystem {
         user.showFriends();
     }
 
+    /**
+     * Manages a user's friend list by adding or removing friends.
+     */
     public void manageFriends() {
         System.out.print("Enter your login: ");
         String login = scanner.nextLine();
@@ -98,6 +111,9 @@ public class BankSystem {
         }
     }
 
+    /**
+     * Creates a new account for a user.
+     */
     public void createAccount() {
         System.out.print("Enter user login: ");
         String login = scanner.nextLine();
@@ -113,6 +129,9 @@ public class BankSystem {
         System.out.println("Account created successfully with ID: " + account.getId());
     }
 
+    /**
+     * Displays the balance of an account.
+     */
     public void showBalance() {
         Account account = findAccount();
         if (account != null) {
@@ -120,6 +139,9 @@ public class BankSystem {
         }
     }
 
+    /**
+     * Deposits money into an account.
+     */
     public void depositMoney() {
         Account account = findAccount();
         if (account == null) return;
@@ -132,6 +154,9 @@ public class BankSystem {
         System.out.println("Deposit successful.");
     }
 
+    /**
+     * Withdraws money from an account.
+     */
     public void withdrawMoney() {
         Account account = findAccount();
         if (account == null) return;
@@ -144,6 +169,9 @@ public class BankSystem {
         System.out.println("Withdrawal successful.");
     }
 
+    /**
+     * Transfers money between accounts.
+     */
     public void transferMoney() {
         System.out.print("Enter sender account ID: ");
         String senderAccountId = scanner.nextLine();
@@ -174,6 +202,9 @@ public class BankSystem {
         }
     }
 
+    /**
+     * Find account by id
+     */
     public Account findAccount() {
         System.out.print("Enter account ID: ");
         String accountId = scanner.nextLine();
