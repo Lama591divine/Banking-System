@@ -1,9 +1,7 @@
-package com.github.Lama591divine;
+package com.github.Lama591divine.entities;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public class User {
 
@@ -13,7 +11,6 @@ public class User {
     private Gender gender;
     private HairColor hairColor;
     private Set<User> friends;
-    private ArrayList<Account> accounts;
 
     public User(String login, String name, int age, Gender gender, HairColor hairColor) {
         this.login = login;
@@ -22,7 +19,6 @@ public class User {
         this.gender = gender;
         this.hairColor = hairColor;
         this.friends = new HashSet<>();
-        this.accounts = new ArrayList<>();
     }
 
     public String getLogin() {

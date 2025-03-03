@@ -1,11 +1,14 @@
 package com.github.Lama591divine;
 
+import com.github.Lama591divine.entities.User;
+import com.github.Lama591divine.interfaces.UserRepository;
+
 import java.util.ArrayList;
 
-public class UserRepository {
+public class InMemmoryUserRepository implements UserRepository {
     private ArrayList<User> users;
 
-    public UserRepository() {
+    public InMemmoryUserRepository() {
         users = new ArrayList<>();
     }
 

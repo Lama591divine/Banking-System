@@ -1,11 +1,14 @@
 package com.github.Lama591divine;
 
+import com.github.Lama591divine.entities.Account;
+import com.github.Lama591divine.interfaces.AccountRepository;
+
 import java.util.ArrayList;
 
-public class AccountRepository {
+public class InMemmoryAccountRepository implements AccountRepository {
     private ArrayList<Account> accounts;
 
-    public AccountRepository() {
+    public InMemmoryAccountRepository() {
         accounts = new ArrayList<>();
     }
 

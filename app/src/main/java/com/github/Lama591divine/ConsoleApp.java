@@ -1,8 +1,13 @@
 package com.github.Lama591divine;
 
+import com.github.Lama591divine.interfaces.AccountRepository;
+import com.github.Lama591divine.interfaces.UserRepository;
+
 public class ConsoleApp {
     public static void main(String[] args) {
-        BankService bankService = new BankService();
+        UserRepository userRepository = new InMemmoryUserRepository();
+        AccountRepository accountRepository = new InMemmoryAccountRepository();
+        BankSystem bankSystem = new BankSystem(userRepository, accountRepository);
 
         while (true) {
             System.out.println("\n=== Bank System Menu ===");
@@ -17,18 +22,18 @@ public class ConsoleApp {
             System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
 
-            int choice = bankService.scanner.nextInt();
-            bankService.scanner.nextLine();
+            int choice = bankSystem.scanner.nextInt();
+            bankSystem.scanner.nextLine();
 
             switch (choice) {
-                case 1 -> bankService.createUser();
-                case 2 -> bankService.showUserInfo();
-                case 3 -> bankService.manageFriends();
-                case 4 -> bankService.createAccount();
-                case 5 -> bankService.showBalance();
-                case 6 -> bankService.depositMoney();
-                case 7 -> bankService.withdrawMoney();
-                case 8 -> bankService.transferMoney();
+                case 1 -> bankSystem.createUser();
+                case 2 -> bankSystem.showUserInfo();
+                case 3 -> bankSystem.manageFriends();
+                case 4 -> bankSystem.createAccount();
+                case 5 -> bankSystem.showBalance();
+                case 6 -> bankSystem.depositMoney();
+                case 7 -> bankSystem.withdrawMoney();
+                case 8 -> bankSystem.transferMoney();
                 case 9 -> {
                     System.out.println("Exiting...");
                     return;

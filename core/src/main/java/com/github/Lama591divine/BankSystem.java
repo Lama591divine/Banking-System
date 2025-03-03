@@ -1,17 +1,24 @@
 package com.github.Lama591divine;
 
+import com.github.Lama591divine.entities.Account;
+import com.github.Lama591divine.entities.Gender;
+import com.github.Lama591divine.entities.HairColor;
+import com.github.Lama591divine.entities.User;
+import com.github.Lama591divine.interfaces.AccountRepository;
+import com.github.Lama591divine.interfaces.UserRepository;
+
 import java.util.Scanner;
 import java.util.UUID;
 
-public class BankService {
+public class BankSystem {
     public final Scanner scanner;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
 
-    public BankService() {
+    public BankSystem(UserRepository userRepository, AccountRepository accountRepository) {
         scanner = new Scanner(System.in);
-        userRepository = new UserRepository();
-        accountRepository = new AccountRepository();
+        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     public void createUser() {

@@ -1,4 +1,4 @@
-package com.github.Lama591divine;
+package com.github.Lama591divine.entities;
 
 import java.util.ArrayList;
 
