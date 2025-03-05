@@ -6,43 +6,20 @@ import com.github.Lama591divine.entities.HairColor;
 import com.github.Lama591divine.entities.User;
 import com.github.Lama591divine.interfaces.Repository;
 
-import java.util.Scanner;
 import java.util.UUID;
 
-/**
- * The {@code BankSystem} class provides core banking functionalities including
- * user management, account creation, balance management, and money transactions.
- */
 public class BankSystem {
-    public final Scanner scanner;
     private final Repository<User> userRepository;
     private final Repository<Account> accountRepository;
 
     public BankSystem(Repository<User> userRepository, Repository<Account> accountRepository) {
-        scanner = new Scanner(System.in);
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
     }
 
-    /**
-     * Creates a new user by collecting necessary details from the console.
-     */
-    public void createUser() {
-        System.out.print("Enter login: ");
-        String login = scanner.nextLine();
-
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter age: ");
-        int age = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter gender (MALE/FEMALE): ");
-        Gender gender = Gender.valueOf(scanner.nextLine().toUpperCase());
-
-        System.out.print("Enter hair color (BLACK, BROWN, BLONDE, RED, GREY, WHITE, OTHER): ");
-        HairColor hairColor = HairColor.valueOf(scanner.nextLine().toUpperCase());
+    public void createUser(String login, String name, int age, String genderStr, String hairColorStr) {
+        Gender gender = Gender.valueOf(genderStr.toUpperCase());
+        HairColor hairColor = HairColor.valueOf(hairColorStr.toUpperCase());
 
         User user = new User(login, name, age, gender, hairColor);
         userRepository.add(user);
@@ -50,14 +27,8 @@ public class BankSystem {
         System.out.println("User created successfully!");
     }
 
-    /**
-     * Displays information about a specified user.
-     */
-    public void showUserInfo() {
-        System.out.print("Enter user login: ");
-        String login = scanner.nextLine();
+    public void showUserInfo(String login) {
         User user = userRepository.getObject(login);
-
         if (user == null) {
             System.out.println("User not found.");
             return;
@@ -74,30 +45,14 @@ public class BankSystem {
         user.showFriends();
     }
 
-    /**
-     * Manages a user's friend list by adding or removing friends.
-     */
-    public void manageFriends() {
-        System.out.print("Enter your login: ");
-        String login = scanner.nextLine();
+    public void manageFriends(String login, String friendLogin, String action) {
         User user = userRepository.getObject(login);
-
-        if (user == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        System.out.print("Enter friend's login: ");
-        String friendLogin = scanner.nextLine();
         User friend = userRepository.getObject(friendLogin);
 
-        if (friend == null) {
-            System.out.println("Friend not found.");
+        if (user == null || friend == null) {
+            System.out.println("User or friend not found.");
             return;
         }
-
-        System.out.print("Add or remove friend? (add/remove): ");
-        String action = scanner.nextLine();
 
         if (action.equalsIgnoreCase("add")) {
             user.addFriend(friend);
@@ -110,14 +65,8 @@ public class BankSystem {
         }
     }
 
-    /**
-     * Creates a new account for a user.
-     */
-    public void createAccount() {
-        System.out.print("Enter user login: ");
-        String login = scanner.nextLine();
+    public void createAccount(String login) {
         User user = userRepository.getObject(login);
-
         if (user == null) {
             System.out.println("User not found.");
             return;
@@ -128,92 +77,60 @@ public class BankSystem {
         System.out.println("Account created successfully with ID: " + account.getId());
     }
 
-    /**
-     * Displays the balance of an account.
-     */
-    public void showBalance() {
-        Account account = findAccount();
-        if (account != null) {
-            System.out.println("Account Balance: " + account.getBalance());
+    public void showBalance(String accountId) {
+        Account account = accountRepository.getObject(accountId);
+        if (account == null) {
+            System.out.println("Account not found.");
+            return;
         }
+
+        System.out.println("Account Balance: " + account.getBalance());
     }
 
-    /**
-     * Deposits money into an account.
-     */
-    public void depositMoney() {
-        Account account = findAccount();
-        if (account == null) return;
-
-        System.out.print("Enter deposit amount: ");
-        int amount = scanner.nextInt();
-        scanner.nextLine();
+    public void depositMoney(String accountId, int amount) {
+        Account account = accountRepository.getObject(accountId);
+        if (account == null) {
+            System.out.println("Account not found.");
+            return;
+        }
 
         account.addBalance(amount);
         System.out.println("Deposit successful.");
     }
 
-    /**
-     * Withdraws money from an account.
-     */
-    public void withdrawMoney() {
-        Account account = findAccount();
-        if (account == null) return;
+    public void withdrawMoney(String accountId, int amount) {
+        Account account = accountRepository.getObject(accountId);
 
-        System.out.print("Enter withdrawal amount: ");
-        int amount = scanner.nextInt();
-        scanner.nextLine();
+        if (account == null) {
+            throw new RuntimeException("Account not found.");
+        }
+
+        if (amount <= 0) {
+            throw new RuntimeException("Invalid withdrawal amount.");
+        }
+
+        if (account.getBalance() < amount) {
+            throw new RuntimeException("Withdrawal error: insufficient funds");
+        }
 
         account.withDraw(amount);
         System.out.println("Withdrawal successful.");
     }
 
-    /**
-     * Transfers money between accounts.
-     */
-    public void transferMoney() {
-        System.out.print("Enter sender account ID: ");
-        String senderAccountId = scanner.nextLine();
+
+    public void transferMoney(String senderAccountId, String receiverAccountId, int amount) {
         Account senderAccount = accountRepository.getObject(senderAccountId);
-
-        if (senderAccount == null) {
-            System.out.println("Sender account not found.");
-            return;
-        }
-
-        System.out.print("Enter receiver account ID: ");
-        String receiverAccountId = scanner.nextLine();
         Account receiverAccount = accountRepository.getObject(receiverAccountId);
 
-        if (receiverAccount == null) {
-            System.out.println("Receiver account not found.");
+        if (senderAccount == null || receiverAccount == null) {
+            System.out.println("Sender or receiver account not found.");
             return;
         }
-
-        System.out.print("Enter transfer amount: ");
-        int amount = scanner.nextInt();
-        scanner.nextLine();
 
         if (senderAccount.transfer(receiverAccount, amount)) {
             System.out.println("Transfer successful.");
         } else {
             System.out.println("Transfer failed.");
         }
-    }
-
-    /**
-     * Find account by id
-     */
-    public Account findAccount() {
-        System.out.print("Enter account ID: ");
-        String accountId = scanner.nextLine();
-        Account account = accountRepository.getObject(accountId);
-
-        if (account == null) {
-            System.out.println("Account not found.");
-            return null;
-        }
-
-        return account;
     }
 }
