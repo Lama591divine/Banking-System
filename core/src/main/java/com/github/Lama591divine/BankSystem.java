@@ -4,8 +4,7 @@ import com.github.Lama591divine.entities.Account;
 import com.github.Lama591divine.entities.Gender;
 import com.github.Lama591divine.entities.HairColor;
 import com.github.Lama591divine.entities.User;
-import com.github.Lama591divine.interfaces.AccountRepository;
-import com.github.Lama591divine.interfaces.UserRepository;
+import com.github.Lama591divine.interfaces.Repository;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -16,10 +15,10 @@ import java.util.UUID;
  */
 public class BankSystem {
     public final Scanner scanner;
-    private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
+    private final Repository<User> userRepository;
+    private final Repository<Account> accountRepository;
 
-    public BankSystem(UserRepository userRepository, AccountRepository accountRepository) {
+    public BankSystem(Repository<User> userRepository, Repository<Account> accountRepository) {
         scanner = new Scanner(System.in);
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
@@ -57,7 +56,7 @@ public class BankSystem {
     public void showUserInfo() {
         System.out.print("Enter user login: ");
         String login = scanner.nextLine();
-        User user = userRepository.getUser(login);
+        User user = userRepository.getObject(login);
 
         if (user == null) {
             System.out.println("User not found.");
@@ -81,7 +80,7 @@ public class BankSystem {
     public void manageFriends() {
         System.out.print("Enter your login: ");
         String login = scanner.nextLine();
-        User user = userRepository.getUser(login);
+        User user = userRepository.getObject(login);
 
         if (user == null) {
             System.out.println("User not found.");
@@ -90,7 +89,7 @@ public class BankSystem {
 
         System.out.print("Enter friend's login: ");
         String friendLogin = scanner.nextLine();
-        User friend = userRepository.getUser(friendLogin);
+        User friend = userRepository.getObject(friendLogin);
 
         if (friend == null) {
             System.out.println("Friend not found.");
@@ -117,7 +116,7 @@ public class BankSystem {
     public void createAccount() {
         System.out.print("Enter user login: ");
         String login = scanner.nextLine();
-        User user = userRepository.getUser(login);
+        User user = userRepository.getObject(login);
 
         if (user == null) {
             System.out.println("User not found.");
@@ -175,7 +174,7 @@ public class BankSystem {
     public void transferMoney() {
         System.out.print("Enter sender account ID: ");
         String senderAccountId = scanner.nextLine();
-        Account senderAccount = accountRepository.getAccount(senderAccountId);
+        Account senderAccount = accountRepository.getObject(senderAccountId);
 
         if (senderAccount == null) {
             System.out.println("Sender account not found.");
@@ -184,7 +183,7 @@ public class BankSystem {
 
         System.out.print("Enter receiver account ID: ");
         String receiverAccountId = scanner.nextLine();
-        Account receiverAccount = accountRepository.getAccount(receiverAccountId);
+        Account receiverAccount = accountRepository.getObject(receiverAccountId);
 
         if (receiverAccount == null) {
             System.out.println("Receiver account not found.");
@@ -208,7 +207,7 @@ public class BankSystem {
     public Account findAccount() {
         System.out.print("Enter account ID: ");
         String accountId = scanner.nextLine();
-        Account account = accountRepository.getAccount(accountId);
+        Account account = accountRepository.getObject(accountId);
 
         if (account == null) {
             System.out.println("Account not found.");

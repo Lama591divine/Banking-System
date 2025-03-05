@@ -1,7 +1,7 @@
 package com.github.Lama591divine;
 
 import com.github.Lama591divine.entities.Account;
-import com.github.Lama591divine.interfaces.AccountRepository;
+import com.github.Lama591divine.interfaces.Repository;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * The {@code InMemmoryAccountRepository} class provides an in-memory implementation of the
  * {@code AccountRepository} interface, storing accounts in a list.
  */
-public class InMemmoryAccountRepository implements AccountRepository {
+public class InMemmoryAccountRepository implements Repository<Account> {
     private ArrayList<Account> accounts;
 
     /**
@@ -52,7 +52,7 @@ public class InMemmoryAccountRepository implements AccountRepository {
      * @param id the ID of the account to retrieve
      * @return the account if found, otherwise {@code null}
      */
-    public Account getAccount(String id) {
+    public Account getObject(String id) {
         for (Account account : accounts) {
             if (account.getId().equals(id)) {
                 return account;
@@ -66,7 +66,7 @@ public class InMemmoryAccountRepository implements AccountRepository {
      *
      * @return a new list containing all accounts
      */
-    public ArrayList<Account> getAccounts() {
+    public ArrayList<Account> getAll() {
         return new ArrayList<>(accounts);
     }
 }

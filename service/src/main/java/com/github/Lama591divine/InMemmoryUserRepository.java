@@ -1,7 +1,7 @@
 package com.github.Lama591divine;
 
 import com.github.Lama591divine.entities.User;
-import com.github.Lama591divine.interfaces.UserRepository;
+import com.github.Lama591divine.interfaces.Repository;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * The {@code InMemmoryUserRepository} class provides an in-memory implementation of the
  * {@code UserRepository} interface, storing users in a list.
  */
-public class InMemmoryUserRepository implements UserRepository {
+public class InMemmoryUserRepository implements Repository<User> {
     private ArrayList<User> users;
 
     /**
@@ -50,7 +50,7 @@ public class InMemmoryUserRepository implements UserRepository {
      * @param login the login of the user to retrieve
      * @return the user if found, otherwise {@code null}
      */
-    public User getUser(String login) {
+    public User getObject(String login) {
         for (User user : users) {
             if (user.getLogin().equals(login)) {
                 return user;
@@ -64,7 +64,7 @@ public class InMemmoryUserRepository implements UserRepository {
      *
      * @return a new list containing all users
      */
-    public ArrayList<User> getAllUsers() {
+    public ArrayList<User> getAll() {
         return new ArrayList<>(users);
     }
 }

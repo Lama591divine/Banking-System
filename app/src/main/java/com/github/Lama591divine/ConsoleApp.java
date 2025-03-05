@@ -1,7 +1,8 @@
 package com.github.Lama591divine;
 
-import com.github.Lama591divine.interfaces.AccountRepository;
-import com.github.Lama591divine.interfaces.UserRepository;
+import com.github.Lama591divine.entities.Account;
+import com.github.Lama591divine.entities.User;
+import com.github.Lama591divine.interfaces.Repository;
 
 /**
  * The {@code ConsoleApp} class serves as the entry point for the bank system application.
@@ -18,8 +19,8 @@ public class ConsoleApp {
      * @param args Command-line arguments (not used in this application).
      */
     public static void main(String[] args) {
-        UserRepository userRepository = new InMemmoryUserRepository();
-        AccountRepository accountRepository = new InMemmoryAccountRepository();
+        Repository<User> userRepository = new InMemmoryUserRepository();
+        Repository<Account> accountRepository = new InMemmoryAccountRepository();
         BankSystem bankSystem = new BankSystem(userRepository, accountRepository);
 
         while (true) {

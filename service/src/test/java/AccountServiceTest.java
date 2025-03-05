@@ -1,47 +1,84 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.github.Lama591divine.entities.Account;
 import com.github.Lama591divine.entities.User;
-import com.github.Lama591divine.entities.Gender;
-import com.github.Lama591divine.entities.HairColor;
+import com.github.Lama591divine.interfaces.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-class AccountServiceTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-    private Account account;
+class AccountServiceTest{
+    private Repository<Account> accountRepository;
     private User user;
+    private Account account;
 
     @BeforeEach
     void setUp() {
-        user = new User("testUser", "Test Name", 30, Gender.MALE, HairColor.BLACK);
+        accountRepository = Mockito.mock(Repository.class);
+        user = new User("testUser", "Test User", 25, null, null);
         account = new Account("12345", user);
+
+        when(accountRepository.getObject("12345")).thenReturn(account);
     }
 
     @Test
-    void withdrawMoney_SufficientBalance_ShouldUpdateBalance() {
-        account.addBalance(1000);
-        assertEquals(1000, account.getBalance());
+    void testDepositMoney() {
+        Account acc = accountRepository.getObject("12345");
+        acc.addBalance(500);
 
-        account.withDraw(500);
-        assertEquals(500, account.getBalance());
-
+        assertEquals(500, acc.getBalance(), "Баланс должен увеличиться на 500");
+        verify(accountRepository, never()).remove(acc);
     }
 
     @Test
-    void withdrawMoney_InsufficientBalance_ShouldNotAllowWithdrawal() {
-        account.addBalance(300);
-        assertEquals(300, account.getBalance());
+    void testDepositNegativeAmount() {
+        Account acc = accountRepository.getObject("12345");
+        acc.addBalance(-100);
 
-        account.withDraw(500);
-        assertEquals(300, account.getBalance());
-
+        assertEquals(0, acc.getBalance(), "Баланс не должен измениться при отрицательном пополнении");
+        verify(accountRepository, never()).remove(acc);
     }
 
     @Test
-    void depositMoney_ShouldUpdateBalance() {
-        account.addBalance(500);
-        assertEquals(500, account.getBalance());
+    void testWithdrawWithSufficientBalance() {
+        Account acc = accountRepository.getObject("12345");
+        acc.addBalance(1000);
+        acc.withDraw(500);
 
+        assertEquals(500, acc.getBalance(), "После снятия 500 баланс должен быть 500");
+        verify(accountRepository, never()).remove(acc);
+    }
+
+    @Test
+    void testWithdrawWithInsufficientBalance() {
+        Account acc = accountRepository.getObject("12345");
+        acc.withDraw(500);
+
+        assertEquals(0, acc.getBalance(), "При недостаточном балансе сумма не должна измениться");
+        verify(accountRepository, never()).remove(acc);
+    }
+
+    @Test
+    void testWithdrawNegativeAmount() {
+        Account acc = accountRepository.getObject("12345");
+        acc.withDraw(-200);
+
+        assertEquals(0, acc.getBalance(), "Баланс не должен изменяться при попытке снять отрицательную сумму");
+        verify(accountRepository, never()).remove(acc);
+    }
+
+    @Test
+    void testRepositoryAddMethodCalled() {
+        accountRepository.add(account);
+
+        verify(accountRepository, times(1)).add(account);
+    }
+
+    @Test
+    void testRepositoryRemoveMethodCalled() {
+        accountRepository.remove(account);
+
+        verify(accountRepository, times(1)).remove(account);
     }
 }
