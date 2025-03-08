@@ -9,13 +9,31 @@ import com.github.Lama591divine.DTO.DtoUser;
 
 import java.util.HashSet;
 
+/**
+ * The {@code UserSystem} class is responsible for user management, including user creation,
+ * retrieving user information, and managing friend relationships.
+ */
 public class UserSystem extends ConverterDTO {
     private final Repository<DtoUser> userRepository;
 
+    /**
+     * Constructs a {@code UserSystem} with the provided user repository.
+     *
+     * @param userRepository the repository managing users
+     */
     public UserSystem(Repository<DtoUser> userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Creates a new user and adds it to the repository.
+     *
+     * @param login       the unique login of the user
+     * @param name        the name of the user
+     * @param age         the age of the user
+     * @param genderStr   the gender of the user (as a string, converted to {@code Gender})
+     * @param hairColorStr the hair color of the user (as a string, converted to {@code HairColor})
+     */
     public void createUser(String login, String name, int age, String genderStr, String hairColorStr) {
         Gender gender = Gender.valueOf(genderStr.toUpperCase());
         HairColor hairColor = HairColor.valueOf(hairColorStr.toUpperCase());
@@ -26,6 +44,11 @@ public class UserSystem extends ConverterDTO {
         System.out.println("User created successfully!");
     }
 
+    /**
+     * Displays information about a user.
+     *
+     * @param login the login of the user
+     */
     public void showUserInfo(String login) {
         DtoUser dtoUser = userRepository.getObject(login);
         if (dtoUser == null) {
@@ -46,6 +69,13 @@ public class UserSystem extends ConverterDTO {
         user.showFriends();
     }
 
+    /**
+     * Manages the friend list of a user. Supports adding and removing friends.
+     *
+     * @param login       the login of the user performing the action
+     * @param friendLogin the login of the friend being added or removed
+     * @param action      the action to perform ("add" to add a friend, "remove" to remove a friend)
+     */
     public void manageFriends(String login, String friendLogin, String action) {
         DtoUser dtoUser = userRepository.getObject(login);
         DtoUser dtoFriend = userRepository.getObject(friendLogin);

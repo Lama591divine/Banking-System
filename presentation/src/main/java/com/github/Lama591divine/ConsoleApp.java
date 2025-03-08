@@ -10,6 +10,11 @@ import com.github.Lama591divine.systems.UserSystem;
 
 import java.util.Scanner;
 
+/**
+ * The {@code ConsoleApp} class represents the main entry point for the banking system.
+ * It provides an interactive console menu for user and account management.
+ * All methods just delegate work to another objects
+ */
 public class ConsoleApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

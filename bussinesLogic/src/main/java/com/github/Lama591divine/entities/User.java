@@ -5,6 +5,10 @@ import java.util.Set;
 import com.github.Lama591divine.enums.HairColor;
 import com.github.Lama591divine.enums.Gender;
 
+/**
+ * The {@code User} class represents a user in the banking system.
+ * Each user has a login, name, age, gender, hair color, and a list of friends.
+ */
 public class User {
 
     private final String login;
@@ -14,6 +18,16 @@ public class User {
     private final HairColor hairColor;
     private final Set<String> friends;
 
+    /**
+     * Constructs a new User.
+     *
+     * @param login     the unique login of the user
+     * @param name      the name of the user
+     * @param age       the age of the user
+     * @param gender    the gender of the user
+     * @param hairColor the hair color of the user
+     * @param friends   a set of friend logins
+     */
     public User(String login, String name, int age, Gender gender, HairColor hairColor, Set<String> friends) {
         this.login = login;
         this.name = name;
@@ -55,6 +69,10 @@ public class User {
         friends.remove(friendid);
     }
 
+    /**
+     * Displays the list of friends of the user.
+     * If the user has no friends, an appropriate message is printed.
+     */
     public void showFriends() {
         if (friends.isEmpty()) {
             System.out.println(login + " has no friends.");

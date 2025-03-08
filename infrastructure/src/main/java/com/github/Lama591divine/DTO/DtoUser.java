@@ -6,6 +6,10 @@ import com.github.Lama591divine.enums.HairColor;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The {@code DtoUser} class is a Data Transfer Object (DTO) that represents a user
+ * in the banking system. It is used to transfer user data between different application layers.
+ */
 public class DtoUser {
     private String login;
     private String name;
