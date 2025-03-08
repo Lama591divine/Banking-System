@@ -11,9 +11,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>core</module>
-        <module>service</module>
-        <module>app</module>
+        <module>bussinesLogic</module>
+        <module>infrastructure</module>
+        <module>presentation</module>
     </modules>
 
     <properties>
