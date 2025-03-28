@@ -59,11 +59,11 @@ public class UserSystem extends ConverterDTO {
         User user = toUser(dtoUser);
 
         System.out.println("\nUser Info:");
-        System.out.println("Login: " + dtoUser.getLogin());
-        System.out.println("Name: " + dtoUser.getName());
-        System.out.println("Age: " + dtoUser.getAge());
-        System.out.println("Gender: " + dtoUser.getGender());
-        System.out.println("Hair Color: " + dtoUser.getHairColor());
+        System.out.println("Login: " + dtoUser.login());
+        System.out.println("Name: " + dtoUser.name());
+        System.out.println("Age: " + dtoUser.age());
+        System.out.println("Gender: " + dtoUser.gender());
+        System.out.println("Hair Color: " + dtoUser.hairColor());
 
         System.out.println("Friends:");
         user.showFriends();

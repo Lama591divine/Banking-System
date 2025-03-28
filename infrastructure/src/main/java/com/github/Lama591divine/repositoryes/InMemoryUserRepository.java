@@ -51,7 +51,7 @@ public class InMemoryUserRepository implements Repository<DtoUser> {
      */
     public DtoUser getObject(String login) {
         for (DtoUser user : users) {
-            if (user.getLogin().equals(login)) {
+            if (user.login().equals(login)) {
                 return user;
             }
         }

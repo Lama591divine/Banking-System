@@ -1,11 +1,14 @@
 package com.github.Lama591divine.entities;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
 /**
  * The {@code Account} class represents a bank account with an owner, balance, and transaction history.
  * It allows deposits, withdrawals, and transfers between accounts with an applicable commission.
  */
+@Getter
 public class Account {
 
     private final String id;
@@ -26,18 +29,6 @@ public class Account {
 
     public ArrayList<String> getTransactions() {
         return new ArrayList<>(transactions);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public String getOwner() {
-        return owner;
     }
 
     /**

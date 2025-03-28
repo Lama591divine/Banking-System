@@ -39,7 +39,7 @@ public class Test_bank_system {
         verify(accountRepository).add(accountCaptor.capture());
 
         DtoAccount savedAccount = accountCaptor.getValue();
-        assertEquals(7000, savedAccount.getBalance());
+        assertEquals(7000, savedAccount.balance());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class Test_bank_system {
         verify(accountRepository).add(accountCaptor.capture());
 
         DtoAccount savedAccount = accountCaptor.getValue();
-        assertEquals(3000, savedAccount.getBalance());
+        assertEquals(3000, savedAccount.balance());
     }
     @Test
     void NotEnoughFunds() {
@@ -62,6 +62,6 @@ public class Test_bank_system {
 
         accountSystem.withdrawMoney("1", 2000);
 
-        assertEquals(1000, dtoAccount.getBalance());
+        assertEquals(1000, dtoAccount.balance());
     }
 }

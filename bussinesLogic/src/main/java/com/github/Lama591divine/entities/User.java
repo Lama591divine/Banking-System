@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 import com.github.Lama591divine.enums.HairColor;
 import com.github.Lama591divine.enums.Gender;
+import lombok.Getter;
 
 /**
  * The {@code User} class represents a user in the banking system.
  * Each user has a login, name, age, gender, hair color, and a list of friends.
  */
+@Getter
 public class User {
 
     private final String login;
@@ -35,26 +37,6 @@ public class User {
         this.gender = gender;
         this.hairColor = hairColor;
         this.friends = friends;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public HairColor getHairColor() {
-        return hairColor;
     }
 
     public Set<String> getFriends() {

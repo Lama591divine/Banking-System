@@ -18,9 +18,8 @@ public class ConverterDTO {
      * @return the corresponding {@code DtoAccount}
      */
     public DtoAccount toDtoAccount(Account account) {
-        String ownerid = account.getOwner();
-        DtoAccount account1 = new DtoAccount(account.getId(), account.getBalance(), account.getTransactions(), ownerid);
-        return account1;
+        String ownerId = account.getOwner();
+        return new DtoAccount(account.getId(), account.getBalance(), account.getTransactions(), ownerId);
     }
 
     /**
@@ -30,9 +29,8 @@ public class ConverterDTO {
      * @return the corresponding {@code Account} entity
      */
     public Account toAccount(DtoAccount dtoAccount) {
-        String ownerid = dtoAccount.getOwner();
-        Account account = new Account(dtoAccount.getId(), dtoAccount.getBalance(), dtoAccount.getTransactions(), ownerid);
-        return account;
+        String ownerId = dtoAccount.owner();
+        return new Account(dtoAccount.id(), dtoAccount.balance(), dtoAccount.transactions(), ownerId);
     }
 
     /**
@@ -42,9 +40,7 @@ public class ConverterDTO {
      * @return the corresponding {@code User} entity
      */
     public User toUser(DtoUser dtoUser) {
-        User user = new User(dtoUser.getLogin(), dtoUser.getName(), dtoUser.getAge(), dtoUser.getGender(), dtoUser.getHairColor(), dtoUser.getFriends());
-
-        return user;
+        return new User(dtoUser.login(), dtoUser.name(), dtoUser.age(), dtoUser.gender(), dtoUser.hairColor(), dtoUser.friends());
     }
 
 
@@ -55,8 +51,6 @@ public class ConverterDTO {
      * @return the corresponding {@code DtoUser}
      */
     public DtoUser toDtoUser(User user) {
-        DtoUser dtoUser = new DtoUser(user.getLogin(), user.getName(), user.getAge(), user.getGender(), user.getHairColor(), user.getFriends());
-
-        return dtoUser;
+        return new DtoUser(user.getLogin(), user.getName(), user.getAge(), user.getGender(), user.getHairColor(), user.getFriends());
     }
 }

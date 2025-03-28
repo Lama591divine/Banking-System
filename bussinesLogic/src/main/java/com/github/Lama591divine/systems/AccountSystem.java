@@ -41,9 +41,9 @@ public class AccountSystem extends ConverterDTO {
             return;
         }
 
-        DtoAccount dtoAccount = new DtoAccount(UUID.randomUUID().toString(), 0, new ArrayList<>(), dtoUser.getLogin());
+        DtoAccount dtoAccount = new DtoAccount(UUID.randomUUID().toString(), 0, new ArrayList<>(), dtoUser.login());
         accountsRepository.add(dtoAccount);
-        System.out.println("Account created successfully with ID: " + dtoAccount.getId());
+        System.out.println("Account created successfully with ID: " + dtoAccount.id());
     }
 
     /**
@@ -58,7 +58,7 @@ public class AccountSystem extends ConverterDTO {
             return;
         }
 
-        System.out.println("Account Balance: " + dtoAccount.getBalance());
+        System.out.println("Account Balance: " + dtoAccount.balance());
     }
 
     /**
@@ -101,7 +101,7 @@ public class AccountSystem extends ConverterDTO {
             System.out.println("Invalid withdrawal amount.");
         }
 
-        if (dtoAccount.getBalance() < amount) {
+        if (dtoAccount.balance() < amount) {
             System.out.println("Withdrawal error: insufficient funds");
         }
 

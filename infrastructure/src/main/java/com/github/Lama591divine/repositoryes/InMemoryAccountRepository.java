@@ -33,7 +33,7 @@ public class InMemoryAccountRepository implements Repository<DtoAccount> {
      * @param account the account to remove
      */
     public void remove(DtoAccount account) {
-        accounts.removeIf(a -> a.getId().equals(account.getId()));
+        accounts.removeIf(a -> a.id().equals(account.id()));
     }
 
 
@@ -52,7 +52,7 @@ public class InMemoryAccountRepository implements Repository<DtoAccount> {
      */
     public DtoAccount getObject(String id) {
         for (DtoAccount account : accounts) {
-            if (account.getId().equals(id)) {
+            if (account.id().equals(id)) {
                 return account;
             }
         }
