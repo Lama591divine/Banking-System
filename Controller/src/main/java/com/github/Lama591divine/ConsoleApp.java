@@ -10,10 +10,7 @@ import java.util.Scanner;
 public class ConsoleApp {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            Dao<User> userDao = new InMemoryUserDao();
-            Dao<Account> accountDao = new InMemoryAccountDao();
-            AccountService accountService = new AccountService(userDao, accountDao);
-            UserService userService = new UserService(userDao);
+            ConsoleController controller = new ConsoleController();
 
             while (true) {
                 System.out.println("\n=== Bank System Menu ===");
@@ -33,16 +30,16 @@ public class ConsoleApp {
                     scanner.nextLine();
 
                     switch (choice) {
-                        case 1 -> ConsoleController.createUser(scanner, userService);
-                        case 2 -> ConsoleController.showUserInfo(scanner, userService);
-                        case 3 -> ConsoleController.manageFriends(scanner, userService);
-                        case 4 -> ConsoleController.createAccount(scanner, accountService);
-                        case 5 -> ConsoleController.showBalance(scanner, accountService);
-                        case 6 -> ConsoleController.depositMoney(scanner, accountService);
-                        case 7 -> ConsoleController.withdrawMoney(scanner, accountService);
-                        case 8 -> ConsoleController.transferMoney(scanner, accountService);
+                        case 1 -> controller.createUser(scanner);
+                        case 2 -> controller.showUserInfo(scanner);
+                        case 3 -> controller.manageFriends(scanner);
+                        case 4 -> controller.createAccount(scanner);
+                        case 5 -> controller.showBalance(scanner);
+                        case 6 -> controller.depositMoney(scanner);
+                        case 7 -> controller.withdrawMoney(scanner);
+                        case 8 -> controller.transferMoney(scanner);
                         case 9 -> {
-                            System.out.println("Exiting...");
+                            controller.close();
                             return;
                         }
                         default -> System.out.println("Invalid choice. Try again.");

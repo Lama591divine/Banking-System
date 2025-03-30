@@ -1,9 +1,24 @@
 package com.github.Lama591divine;
 
+import com.github.Lama591divine.DbDao.DbAccountDao;
+import com.github.Lama591divine.DbDao.DbUserDao;
+
 import java.util.Scanner;
 
 public class ConsoleController {
-    public static void createUser(Scanner scanner, UserService userSystem) {
+    private final Dao<User> userDao;
+    private final Dao<Account> accountDao;
+    private final AccountService accountService;
+    private final UserService userService;
+
+    public ConsoleController() {
+        userDao = new DbUserDao();
+        accountDao = new DbAccountDao();
+        accountService = new AccountService(userDao, accountDao);
+        userService = new UserService(userDao);
+    }
+
+    public void createUser(Scanner scanner) {
         System.out.print("Enter login: ");
         String login = scanner.nextLine();
         System.out.print("Enter name: ");
@@ -15,56 +30,56 @@ public class ConsoleController {
         String gender = scanner.nextLine();
         System.out.print("Enter hair color: ");
         String hairColor = scanner.nextLine();
-        userSystem.createUser(login, name, age, gender, hairColor);
+        userService.createUser(login, name, age, gender, hairColor);
     }
 
-    public static void showUserInfo(Scanner scanner, UserService userSystem) {
+    public void showUserInfo(Scanner scanner) {
         System.out.print("Enter user login: ");
         String login = scanner.nextLine();
-        userSystem.showUserInfo(login);
+        userService.showUserInfo(login);
     }
 
-    public static void manageFriends(Scanner scanner, UserService userSystem) {
+    public void manageFriends(Scanner scanner) {
         System.out.print("Enter your login: ");
         String login = scanner.nextLine();
         System.out.print("Enter friend's login: ");
         String friendLogin = scanner.nextLine();
         System.out.print("Add or remove friend? (add/remove): ");
         String action = scanner.nextLine();
-        userSystem.manageFriends(login, friendLogin, action);
+        userService.manageFriends(login, friendLogin, action);
     }
 
-    public static void createAccount(Scanner scanner, AccountService accountSystem) {
+    public void createAccount(Scanner scanner) {
         System.out.print("Enter user login: ");
         String login = scanner.nextLine();
-        accountSystem.createAccount(login);
+        accountService.createAccount(login);
     }
 
-    public static void showBalance(Scanner scanner, AccountService accountSystem) {
+    public void showBalance(Scanner scanner) {
         System.out.print("Enter account ID: ");
         String accountId = scanner.nextLine();
-        accountSystem.showBalance(accountId);
+        accountService.showBalance(accountId);
     }
 
-    public static void depositMoney(Scanner scanner, AccountService accountSystem) {
+    public void depositMoney(Scanner scanner) {
         System.out.print("Enter account ID: ");
         String accountId = scanner.nextLine();
         System.out.print("Enter deposit amount: ");
         int amount = scanner.nextInt();
         scanner.nextLine();
-        accountSystem.depositMoney(accountId, amount);
+        accountService.depositMoney(accountId, amount);
     }
 
-    public static void withdrawMoney(Scanner scanner, AccountService accountSystem) {
+    public void withdrawMoney(Scanner scanner) {
         System.out.print("Enter account ID: ");
         String accountId = scanner.nextLine();
         System.out.print("Enter withdrawal amount: ");
         int amount = scanner.nextInt();
         scanner.nextLine();
-        accountSystem.withdrawMoney(accountId, amount);
+        accountService.withdrawMoney(accountId, amount);
     }
 
-    public static void transferMoney(Scanner scanner, AccountService accountSystem) {
+    public void transferMoney(Scanner scanner) {
         System.out.print("Enter sender account ID: ");
         String senderId = scanner.nextLine();
         System.out.print("Enter receiver account ID: ");
@@ -72,6 +87,11 @@ public class ConsoleController {
         System.out.print("Enter transfer amount: ");
         int amount = scanner.nextInt();
         scanner.nextLine();
-        accountSystem.transferMoney(senderId, receiverId, amount);
+        accountService.transferMoney(senderId, receiverId, amount);
+    }
+
+    public void close() {
+        userDao.close();
+        accountDao.close();
     }
 }

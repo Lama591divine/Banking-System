@@ -23,10 +23,10 @@ public class AccountService {
                 UUID.randomUUID().toString(),
                 0,
                 new ArrayList<>(),
-                user.getLogin()
+                user
         );
 
-        accountDao.add(newAccount);
+        accountDao.create(newAccount);
         System.out.println("Account created successfully with ID: " + newAccount.getId());
     }
 
@@ -57,6 +57,8 @@ public class AccountService {
                 "Deposit: +" + amount + " | New balance: " + newBalance
         );
 
+        accountDao.update(account);
+
         System.out.println("Deposit successful.");
     }
 
@@ -82,6 +84,8 @@ public class AccountService {
                 "Withdrawal: -" + amount + " | New balance: " + newBalance
         );
 
+        accountDao.update(account);
+
         System.out.println("Withdrawal successful.");
     }
 
@@ -102,8 +106,8 @@ public class AccountService {
             return;
         }
 
-        User senderUser = userDao.getObjectById(sender.getOwner());
-        User receiverUser = userDao.getObjectById(receiver.getOwner());
+        User senderUser = userDao.getObjectById(sender.getOwner().getLogin());
+        User receiverUser = userDao.getObjectById(receiver.getOwner().getLogin());
         double commissionRate = getCommissionRate(senderUser, receiverUser);
 
         int commission = (int) (amount * commissionRate);
@@ -126,6 +130,9 @@ public class AccountService {
                         + " | Balance: " + receiver.getBalance()
         );
 
+        accountDao.update(sender);
+        accountDao.update(receiver);
+
         System.out.println("Transfer successful.");
     }
 
@@ -133,7 +140,7 @@ public class AccountService {
         if (from.getLogin().equals(to.getLogin())) {
             return 0.0;
         }
-        if (from.getFriends().contains(to.getLogin())) {
+        if (from.getFriends().contains(to)) {
             return 0.03;
         }
         return 0.1;

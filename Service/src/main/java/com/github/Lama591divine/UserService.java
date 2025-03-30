@@ -1,11 +1,13 @@
 package com.github.Lama591divine;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class UserService {
     private final Dao<User> userDao;
 
     public UserService(Dao<User> userDao) {
+
         this.userDao = userDao;
     }
 
@@ -15,7 +17,7 @@ public class UserService {
 
         User user = new User(login, name, age, gender, hairColor, new HashSet<>());
 
-        userDao.add(user);
+        userDao.create(user);
         System.out.println("User created successfully!");
     }
 
@@ -38,10 +40,14 @@ public class UserService {
         }
         else {
             System.out.println("Friends of " + user.getLogin() + ":");
-            for (String friend : user.getFriends()) {
-                System.out.println("- " + friend);
+            for (User friend : user.getFriends()) {
+                System.out.println("- " + friend.getLogin());
             }
         }
+
+        Set<Account> accounts = user.getAccounts();
+        System.out.println("Accounts:");
+        accounts.forEach(account -> System.out.println(account.getId()));
     }
 
     public void manageFriends(String login, String friendLogin, String action) {
@@ -54,19 +60,22 @@ public class UserService {
         }
 
         if (action.equalsIgnoreCase("add")) {
-            user.getFriends().add(friendLogin);
-            friend.getFriends().add(login);
+            user.getFriends().add(friend);
+            friend.getFriends().add(user);
             System.out.println(friendLogin + " added as a friend for " + login);
 
         }
         else if (action.equalsIgnoreCase("remove")) {
-            user.getFriends().remove(friendLogin);
-            friend.getFriends().remove(login);
+            user.getFriends().remove(friend);
+            friend.getFriends().remove(user);
             System.out.println(friendLogin + " removed from friends of " + login);
 
         }
         else {
             System.out.println("Invalid action.");
         }
+
+        userDao.update(user);
+        userDao.update(friend);
     }
 }
