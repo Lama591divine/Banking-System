@@ -48,9 +48,4 @@ public class InMemoryUserDao implements Dao<User> {
     public List<User> getAll() {
         return new ArrayList<>(users);
     }
-
-    @Override
-    public void close() {
-        users.clear();
-    }
 }

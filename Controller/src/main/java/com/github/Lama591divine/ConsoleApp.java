@@ -39,7 +39,6 @@ public class ConsoleApp {
                         case 7 -> controller.withdrawMoney(scanner);
                         case 8 -> controller.transferMoney(scanner);
                         case 9 -> {
-                            controller.close();
                             return;
                         }
                         default -> System.out.println("Invalid choice. Try again.");

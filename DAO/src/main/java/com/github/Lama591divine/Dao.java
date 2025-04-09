@@ -8,5 +8,4 @@ public interface Dao<T>  {
     void update(T object);
     T getObjectById(String id);
     List<T> getAll();
-    void close();
 }

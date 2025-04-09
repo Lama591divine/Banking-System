@@ -49,9 +49,4 @@ public class InMemoryAccountDao implements Dao<Account> {
     public List<Account> getAll() {
         return new ArrayList<>(accounts);
     }
-
-    @Override
-    public void close() {
-        accounts.clear();
-    }
 }

@@ -6,14 +6,12 @@ import com.github.Lama591divine.DbDao.DbUserDao;
 import java.util.Scanner;
 
 public class ConsoleController {
-    private final Dao<User> userDao;
-    private final Dao<Account> accountDao;
     private final AccountService accountService;
     private final UserService userService;
 
     public ConsoleController() {
-        userDao = new DbUserDao();
-        accountDao = new DbAccountDao();
+        DbUserDao userDao = new DbUserDao();
+        DbAccountDao accountDao = new DbAccountDao();
         accountService = new AccountService(userDao, accountDao);
         userService = new UserService(userDao);
     }
@@ -88,10 +86,5 @@ public class ConsoleController {
         int amount = scanner.nextInt();
         scanner.nextLine();
         accountService.transferMoney(senderId, receiverId, amount);
-    }
-
-    public void close() {
-        userDao.close();
-        accountDao.close();
     }
 }
