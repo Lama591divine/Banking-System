@@ -10,9 +10,9 @@ public abstract class SessionDb<T> implements Dao<T> {
     protected final SessionFactory sessionFactory;
     private final Class<T> clazz;
 
-    public SessionDb(Class<T> clazz) {
+    public SessionDb(Class<T> clazz, SessionFactory sessionFactory) {
         this.clazz = clazz;
-        sessionFactory = HibernateConnect.getSessionFactory();
+        this.sessionFactory = sessionFactory;
     }
 
     @Override

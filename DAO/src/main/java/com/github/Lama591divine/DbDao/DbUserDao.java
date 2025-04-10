@@ -3,10 +3,11 @@ package com.github.Lama591divine.DbDao;
 import com.github.Lama591divine.User;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class DbUserDao extends SessionDb<User> {
-    public DbUserDao() {
-        super(User.class);
+    public DbUserDao(SessionFactory sessionFactory) {
+        super(User.class, sessionFactory);
     }
 
     @Override

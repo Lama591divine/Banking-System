@@ -2,6 +2,7 @@ package com.github.Lama591divine;
 
 import com.github.Lama591divine.DbDao.DbAccountDao;
 import com.github.Lama591divine.DbDao.DbUserDao;
+import com.github.Lama591divine.DbDao.HibernateConnect;
 
 import java.util.Scanner;
 
@@ -10,8 +11,8 @@ public class ConsoleController {
     private final UserService userService;
 
     public ConsoleController() {
-        DbUserDao userDao = new DbUserDao();
-        DbAccountDao accountDao = new DbAccountDao();
+        DbUserDao userDao = new DbUserDao(HibernateConnect.getSessionFactory());
+        DbAccountDao accountDao = new DbAccountDao(HibernateConnect.getSessionFactory());
         accountService = new AccountService(userDao, accountDao);
         userService = new UserService(userDao);
     }
