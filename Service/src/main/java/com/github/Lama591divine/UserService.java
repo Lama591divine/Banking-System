@@ -17,7 +17,7 @@ public class UserService {
             Gender gender = Gender.valueOf(genderStr.toUpperCase());
             HairColor hairColor = HairColor.valueOf(hairColorStr.toUpperCase());
 
-            User user = new User(login, name, age, gender, hairColor, new HashSet<>());
+            User user = new User(login, name, age, gender, hairColor, new HashSet<>(), new HashSet<>());
 
             userDao.create(user);
             System.out.println("User created successfully!");

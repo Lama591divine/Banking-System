@@ -1,6 +1,7 @@
 package com.github.Lama591divine;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "accounts")
 public class Account {
@@ -19,7 +21,7 @@ public class Account {
     private String id;
 
     @Column(name = "balance", nullable = false)
-    private int balance;
+    private Integer balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", nullable = false)
@@ -32,11 +34,4 @@ public class Account {
     )
     @Column(name = "transaction")
     private List<String> transactions;
-
-    public Account(String id, int balance, List<String> transactions, User owner) {
-        this.id = id;
-        this.balance = balance;
-        this.transactions = transactions;
-        this.owner = owner;
-    }
 }
