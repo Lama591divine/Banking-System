@@ -11,9 +11,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>bussinesLogic</module>
-        <module>infrastructure</module>
-        <module>presentation</module>
+        <module>Controller</module>
+        <module>Service</module>
+        <module>DAO</module>
+        <module>Model</module>
     </modules>
 
     <properties>
@@ -51,6 +52,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
