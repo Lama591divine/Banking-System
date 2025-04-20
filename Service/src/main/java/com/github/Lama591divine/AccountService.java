@@ -25,8 +25,8 @@ public class AccountService {
             Account newAccount = new Account(
                     UUID.randomUUID().toString(),
                     0,
-                    user,
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    user
             );
 
             accountDao.create(newAccount);
