@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/accounts")
 @Validated
@@ -61,6 +63,42 @@ public class AccountController {
     )
     public AccountDto getAccount(@PathVariable @NotBlank String id) {
         return accountService.get(id);
+    }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Получить все счета пользователей",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK",
+                            content = @Content(schema = @Schema(implementation = AccountDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Неверный запрос (например, пустой или неверный формат ID)",
+                            content = @Content(schema = @Schema(implementation = NotValidResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Счёт не найден",
+                            content = @Content(schema = @Schema(implementation = NotFoundResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            }
+    )
+    public List<AccountDto> getAllAccounts() {
+        return accountService.getAll();
+    }
+
+    @GetMapping("/{id}/getTransactions/{TypeTransaction}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Получить список всех транзакций по id и типу транзакции",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK",
+                            content = @Content(schema = @Schema(implementation = AccountDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Неверный запрос (например, пустой или неверный формат ID)",
+                            content = @Content(schema = @Schema(implementation = NotValidResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Счёт не найден",
+                            content = @Content(schema = @Schema(implementation = NotFoundResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            }
+    )
+    public List<String> getTransactions(@PathVariable @NotBlank String id, @PathVariable @NotBlank String TypeTransaction) {
+        return accountService.getTransactionsByFilter(id, TypeTransaction);
     }
 
     @PostMapping("/{id}/deposit/{amount}")

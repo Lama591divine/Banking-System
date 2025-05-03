@@ -4,6 +4,8 @@ import com.github.lama591divine.dto.request.CreateUserRequest;
 import com.github.lama591divine.dto.badStatus.NotFoundResponse;
 import com.github.lama591divine.dto.badStatus.NotValidResponse;
 import com.github.lama591divine.dto.response.UserDto;
+import com.github.lama591divine.enums.Gender;
+import com.github.lama591divine.enums.HairColor;
 import com.github.lama591divine.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,10 +14,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -64,6 +70,42 @@ public class UserController {
     )
     public UserDto getUser(@PathVariable @NotBlank String login) {
         return userService.get(login);
+    }
+
+    @GetMapping("/{login}/getFriends")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Получить список друзей пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK",
+                            content = @Content(schema = @Schema(implementation = UserDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Неверный запрос",
+                            content = @Content(schema = @Schema(implementation = NotValidResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+                            content = @Content(schema = @Schema(implementation = NotFoundResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            }
+    )
+    public Set<String> getFriends(@PathVariable @NotBlank String login) {
+        return userService.get(login).friends();
+    }
+
+    @GetMapping("/{login}/getByHairColorAndGender/{hairColor}/{gender}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Получить всех пользователей системы по фильтру",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK",
+                            content = @Content(schema = @Schema(implementation = UserDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Неверный запрос",
+                            content = @Content(schema = @Schema(implementation = NotValidResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+                            content = @Content(schema = @Schema(implementation = NotFoundResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            }
+    )
+    public List<UserDto> getByFilter(@PathVariable @NotNull HairColor hairColor, @PathVariable @NotNull Gender gender) {
+        return userService.getAllByHairColorAndGender(hairColor, gender);
     }
 
     @PostMapping("/{login}/friends/{friendlogin}")

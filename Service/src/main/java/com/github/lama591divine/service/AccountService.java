@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,15 @@ public class AccountService {
 
     public AccountDto get(String id) {
         return mapper.toDto(find(id));
+    }
+
+    public List<String> getTransactionsByFilter(String id, String typeTransaction) {
+        return mapper.toDto(find(id)).transactions().stream().filter((tx -> tx.contains(typeTransaction))).collect(Collectors.toList());
+    }
+
+    public List<AccountDto> getAll() {
+        List<Account> accounts = accountDao.findAll();
+        return accounts.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Transactional
