@@ -3,6 +3,7 @@ package com.github.lama591divine.controller;
 import com.github.lama591divine.dto.request.CreateUserRequest;
 import com.github.lama591divine.dto.badStatus.NotFoundResponse;
 import com.github.lama591divine.dto.badStatus.NotValidResponse;
+import com.github.lama591divine.dto.request.RequestFriend;
 import com.github.lama591divine.dto.response.UserDto;
 import com.github.lama591divine.enums.Gender;
 import com.github.lama591divine.enums.HairColor;
@@ -44,8 +45,8 @@ public class UserController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public UserDto createUser(@RequestBody @Valid CreateUserRequest request) {
-        return userService.create(
+    public void createUser(@RequestBody @Valid CreateUserRequest request) {
+        userService.create(
                 request.login(),
                 request.name(),
                 request.age(),
@@ -104,11 +105,11 @@ public class UserController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public List<UserDto> getByFilter(@PathVariable @NotNull HairColor hairColor, @PathVariable @NotNull Gender gender) {
+    public List<UserDto> getByFilter(@PathVariable HairColor hairColor, @PathVariable Gender gender) {
         return userService.getAllByHairColorAndGender(hairColor, gender);
     }
 
-    @PostMapping("/{login}/friends/{friendlogin}")
+    @PostMapping("/friends")
     @ResponseStatus(HttpStatus.OK)
     @Operation(
             summary = "Добавить друга (в обе стороны)",
@@ -123,13 +124,12 @@ public class UserController {
             }
     )
     public UserDto addFriend(
-            @PathVariable @NotBlank String login,
-            @PathVariable @NotBlank String friendlogin) {
-        userService.addFriend(login, friendlogin);
-        return userService.get(login);
+            @RequestBody @Valid RequestFriend requestFriend) {
+        userService.addFriend(requestFriend.login(), requestFriend.friendlogin());
+        return userService.get(requestFriend.login());
     }
 
-    @DeleteMapping("/{login}/friends/{friendlogin}")
+    @DeleteMapping("/friends")
     @ResponseStatus(HttpStatus.OK)
     @Operation(
             summary = "Удалить друга (в обе стороны)",
@@ -144,9 +144,8 @@ public class UserController {
             }
     )
     public UserDto removeFriend(
-            @PathVariable @NotBlank String login,
-            @PathVariable @NotBlank String friendlogin) {
-        userService.removeFriend(login, friendlogin);
-        return userService.get(login);
+            @RequestBody @Valid RequestFriend requestFriend) {
+        userService.removeFriend(requestFriend.login(), requestFriend.friendlogin());
+        return userService.get(requestFriend.login());
     }
 }

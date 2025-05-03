@@ -11,10 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +23,9 @@ public class UserService {
     private final DtoMapper mapper;
 
     @Transactional
-    public UserDto create(String login, String name, Integer age, Gender gender, HairColor hairColor) {
+    public void create(String login, String name, Integer age, Gender gender, HairColor hairColor) {
         User user = new User(login, name, age, gender, hairColor, new HashSet<>(), new HashSet<>());
-        return mapper.toDto(userDao.save(user));
+        userDao.save(user);
     }
 
     public UserDto get(String login) {

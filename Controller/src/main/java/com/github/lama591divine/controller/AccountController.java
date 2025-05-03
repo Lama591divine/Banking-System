@@ -1,5 +1,8 @@
 package com.github.lama591divine.controller;
 
+import com.github.lama591divine.dto.request.CreateAccount;
+import com.github.lama591divine.dto.request.RequestMoney;
+import com.github.lama591divine.dto.request.RequestTransaction;
 import com.github.lama591divine.dto.response.AccountDto;
 import com.github.lama591divine.dto.badStatus.NotFoundResponse;
 import com.github.lama591divine.dto.badStatus.NotValidResponse;
@@ -11,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,7 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @PostMapping("/users/{login}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(
             summary = "Открыть счёт для пользователя",
@@ -43,8 +45,8 @@ public class AccountController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public AccountDto openAccount(@PathVariable @NotBlank String login) {
-        return accountService.createAccountForUser(login);
+    public void openAccount(@RequestBody @Valid CreateAccount createAccount) {
+        accountService.createAccountForUser(createAccount.userLogin());
     }
 
     @GetMapping("/{id}")
@@ -65,7 +67,7 @@ public class AccountController {
         return accountService.get(id);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(
             summary = "Получить все счета пользователей",
@@ -83,7 +85,7 @@ public class AccountController {
         return accountService.getAll();
     }
 
-    @GetMapping("/{id}/getTransactions/{TypeTransaction}")
+    @GetMapping("/getTransactions")
     @ResponseStatus(HttpStatus.OK)
     @Operation(
             summary = "Получить список всех транзакций по id и типу транзакции",
@@ -97,11 +99,11 @@ public class AccountController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public List<String> getTransactions(@PathVariable @NotBlank String id, @PathVariable @NotBlank String TypeTransaction) {
-        return accountService.getTransactionsByFilter(id, TypeTransaction);
+    public List<String> getTransactions(@RequestBody @Valid RequestTransaction request) {
+        return accountService.getTransactionsByFilter(request.id(), request.typeTransaction());
     }
 
-    @PostMapping("/{id}/deposit/{amount}")
+    @PostMapping("/deposit")
     @ResponseStatus(HttpStatus.OK)
     @Operation(
             summary = "Пополнить счёт",
@@ -116,13 +118,12 @@ public class AccountController {
             }
     )
     public AccountDto deposit(
-            @PathVariable @NotBlank String id,
-            @PathVariable @Min(0) Integer amount
+            @RequestBody @Valid RequestMoney request
     ) {
-        return accountService.deposit(id, amount);
+        return accountService.deposit(request.id(), request.amount());
     }
 
-    @PostMapping("/{id}/withdraw/{amount}")
+    @PostMapping("/withdraw")
     @ResponseStatus(HttpStatus.OK)
     @Operation(
             summary = "Снять средства со счёта",
@@ -137,10 +138,9 @@ public class AccountController {
             }
     )
     public AccountDto withdraw(
-            @PathVariable @NotBlank String id,
-            @PathVariable @Min(0) Integer amount
+            @RequestBody @Valid RequestMoney request
     ) {
-        return accountService.withdraw(id, amount);
+        return accountService.withdraw(request.id(), request.amount());
     }
 
     @PostMapping("/transfer")

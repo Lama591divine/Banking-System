@@ -26,11 +26,10 @@ public class AccountService {
     private final DtoMapper mapper;
 
     @Transactional
-    public AccountDto createAccountForUser(String login) {
+    public void createAccountForUser(String login) {
         User owner = userDao.findById(login).orElseThrow(() -> new UserNotFoundException(login));
         Account account = new Account(UUID.randomUUID().toString(), 0, owner, new ArrayList<>());
-        Account accountResult = accountDao.save(account);
-        return mapper.toDto(accountResult);
+        accountDao.save(account);
     }
 
     public AccountDto get(String id) {
