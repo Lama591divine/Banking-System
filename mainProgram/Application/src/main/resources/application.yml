@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankSystemDB
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: Lama2005argo
+  jpa:
+    hibernate.ddl-auto: update

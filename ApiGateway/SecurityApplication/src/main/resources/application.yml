@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankSystemDB
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: Lama2005argo
+  jpa:
+    hibernate.ddl-auto: update
+
+jwt:
+  secret: "zM7HwqMZKe1hMfAoDZK6y0LOpmFgBGzptsnkNHlxKIM="
+  expiration: 3600000
