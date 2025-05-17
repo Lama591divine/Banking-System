@@ -5,12 +5,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtility {
@@ -19,28 +21,37 @@ public class JwtUtility {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private Long expiration;
+    private Long duration;
 
-    Key key;
+    SecretKey key;
 
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateJwt(UserDetails userDetails) {
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
         return Jwts.builder()
                 .subject(userDetails.getUsername())
-                .claim("roles", userDetails.getAuthorities())
+                .claim("roles", roles)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .expiration(new Date(System.currentTimeMillis() + duration))
                 .signWith(key)
                 .compact();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, String userLogin) {
         String username = extractLogin(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return username.equals(userLogin) && !isTokenExpired(token);
+    }
+
+    public Claims parse(String token) {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
 
     private String extractLogin(String token) {
@@ -49,9 +60,5 @@ public class JwtUtility {
 
     private boolean isTokenExpired(String token) {
         return parse(token).getExpiration().before(new Date());
-    }
-
-    public Claims parse(String token) {
-        return Jwts.parser().verifyWith((SecretKey)key).build().parseSignedClaims(token).getPayload();
     }
 }

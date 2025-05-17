@@ -1,6 +1,6 @@
 package com.github.lama591divine.controller;
 
-import com.github.lama591divine.dto.request.CreateAccount;
+import com.github.lama591divine.dto.request.CreateAccountDto;
 import com.github.lama591divine.dto.request.RequestMoney;
 import com.github.lama591divine.dto.request.RequestTransaction;
 import com.github.lama591divine.dto.response.AccountDto;
@@ -45,8 +45,8 @@ public class AccountController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public void openAccount(@RequestBody @Valid CreateAccount createAccount) {
-        accountService.createAccountForUser(createAccount.userLogin());
+    public void openAccount(@RequestBody @Valid CreateAccountDto createAccountDto) {
+        accountService.createAccountForUser(createAccountDto.userLogin());
     }
 
     @GetMapping("/{id}")
@@ -117,9 +117,7 @@ public class AccountController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public AccountDto deposit(
-            @RequestBody @Valid RequestMoney request
-    ) {
+    public AccountDto deposit(@RequestBody @Valid RequestMoney request) {
         return accountService.deposit(request.id(), request.amount());
     }
 
@@ -137,9 +135,7 @@ public class AccountController {
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
-    public AccountDto withdraw(
-            @RequestBody @Valid RequestMoney request
-    ) {
+    public AccountDto withdraw(@RequestBody @Valid RequestMoney request) {
         return accountService.withdraw(request.id(), request.amount());
     }
 
