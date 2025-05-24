@@ -1,0 +1,11 @@
+package com.github.lama591divine;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MainProgramApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MainProgramApp.class, args);
+    }
+}
