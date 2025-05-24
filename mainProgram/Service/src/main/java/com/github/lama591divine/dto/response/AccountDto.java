@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
-public record AccountDto (@NotBlank String id, @Min(0) Integer balance, @NotBlank String ownerLogin, @NotBlank List<String> transactions) {
-
-}
+public record AccountDto(
+        @NotBlank String accountNumber,
+        @Min(0) Integer balance,
+        @NotBlank String ownerLogin,
+        List<String> transactions
+) {}

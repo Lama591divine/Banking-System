@@ -4,12 +4,15 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    driverClassName: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver
     username: postgres
     password: Lama2005argo
   jpa:
-    hibernate.ddl-auto: update
+    hibernate:
+      ddl-auto: update
 
+core-service:
+  base-url: http://localhost:8080
 
 jwt:
   secret: "zM7HwqMZKe1hMfAoDZK6y0LOpmFgBGzptsnkNHlxKIM="

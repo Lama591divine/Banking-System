@@ -8,5 +8,12 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
-public record UserDto(@NotBlank String login, @NotBlank String name, @Min(14) Integer age, @NotNull Gender gender,
-                      @NotNull HairColor hairColor, @NotBlank Set<String> friends, @NotBlank Set<String> accounts) {}
+public record UserDto(
+        @NotBlank String login,
+        @NotBlank String name,
+        @Min(14) Integer age,
+        @NotNull Gender gender,
+        @NotNull HairColor hairColor,
+        Set<String> friends,
+        Set<String> accounts
+) {}
