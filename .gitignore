@@ -11,6 +11,23 @@ hs_err_pid*
 replay_pid*
 
 ##############################
+## Spring
+##############################
+*.env
+.env.*
+application.properties
+application.yml
+application-*.yml
+application-*.properties
+secrets.yml
+config.yml
+*.key
+*.pem
+*.crt
+*.jks
+*.p12
+
+##############################
 ## Maven
 ##############################
 **/target/
