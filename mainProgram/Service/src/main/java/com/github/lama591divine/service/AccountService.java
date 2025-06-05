@@ -2,6 +2,7 @@ package com.github.lama591divine.service;
 
 import com.github.lama591divine.dao.AccountDao;
 import com.github.lama591divine.dao.UserDao;
+import com.github.lama591divine.dto.kafkadto.AccountDomainEvent;
 import com.github.lama591divine.dto.response.AccountDto;
 import com.github.lama591divine.entities.Account;
 import com.github.lama591divine.entities.Transaction;
@@ -9,6 +10,7 @@ import com.github.lama591divine.entities.User;
 import com.github.lama591divine.exception.*;
 import com.github.lama591divine.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +21,22 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class AccountService {
 
-    private final AccountDao     accountDao;
-    private final UserDao        userDao;
-    private final DtoMapper      mapper;
+    private final AccountDao accountDao;
+    private final UserDao    userDao;
+    private final DtoMapper  mapper;
+    private final ApplicationEventPublisher events;   // <-- новое
 
     @Transactional
     public void createAccountForUser(String login) {
         User user = userDao.findByLogin(login)
                 .orElseThrow(() -> new UserNotFoundException(login));
-        accountDao.save(new Account(UUID.randomUUID(), 0, user));
+
+        Account acc = accountDao.save(new Account(UUID.randomUUID(), 0, user));
+
+        events.publishEvent(new AccountDomainEvent(
+                acc.getAccountNumber().toString(),
+                "CREATED",
+                mapper.toDto(acc)));
     }
 
     public AccountDto get(String accountNumber) {
@@ -40,13 +49,15 @@ public class AccountService {
                 .map(mapper::toDto)
                 .toList();
     }
-
     @Transactional
     public AccountDto deposit(String accNum, int amount) {
         Account acc = find(accNum);
         acc.setBalance(acc.getBalance() + amount);
         acc.addTransaction(new Transaction(acc, "DEPOSIT +" + amount));
-        return mapper.toDto(acc);
+
+        AccountDto dto = mapper.toDto(acc);
+        events.publishEvent(new AccountDomainEvent(accNum, "DEPOSIT", dto));
+        return dto;
     }
 
     @Transactional
@@ -55,7 +66,10 @@ public class AccountService {
         if (acc.getBalance() < amount) throw new ValidationException("Not enough funds");
         acc.setBalance(acc.getBalance() - amount);
         acc.addTransaction(new Transaction(acc, "WITHDRAW -" + amount));
-        return mapper.toDto(acc);
+
+        AccountDto dto = mapper.toDto(acc);
+        events.publishEvent(new AccountDomainEvent(accNum, "WITHDRAW", dto));
+        return dto;
     }
 
     @Transactional
@@ -65,9 +79,9 @@ public class AccountService {
 
         int commission = calcCommission(amount, from.getOwner(), to.getOwner());
         int total      = amount + commission;
-        if (from.getBalance() < total) {
+        if (from.getBalance() < total)
             throw new ValidationException("Not enough funds (with commission)");
-        }
+
         from.setBalance(from.getBalance() - total);
         to.setBalance(  to.getBalance() + amount);
 
@@ -75,6 +89,9 @@ public class AccountService {
                 "TRANSFER -" + amount + " (commission " + commission + ") -> " + toNum));
         to.addTransaction(new Transaction(to,
                 "RECEIVE +"  + amount + " <- " + fromNum));
+
+        events.publishEvent(new AccountDomainEvent(fromNum, "TRANSFER_OUT", mapper.toDto(from)));
+        events.publishEvent(new AccountDomainEvent(toNum,   "TRANSFER_IN",  mapper.toDto(to)));
     }
 
     public List<String> getTransactionsByFilter(String accNum, String substring) {
