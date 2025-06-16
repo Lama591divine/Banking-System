@@ -59,6 +59,7 @@
         <module>ApiGateway/SecurityController</module>
         <module>ApiGateway/SecurityDao</module>
         <module>ApiGateway/SecurityModel</module>
+        <module>Storage</module>
     </modules>
 
     <build>

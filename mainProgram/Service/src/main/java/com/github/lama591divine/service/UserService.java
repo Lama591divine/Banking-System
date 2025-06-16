@@ -1,6 +1,7 @@
 package com.github.lama591divine.service;
 
 import com.github.lama591divine.dao.UserDao;
+import com.github.lama591divine.dto.kafkadto.UserDomainEvent;
 import com.github.lama591divine.dto.response.UserDto;
 import com.github.lama591divine.entities.User;
 import com.github.lama591divine.enums.Gender;
@@ -8,6 +9,7 @@ import com.github.lama591divine.enums.HairColor;
 import com.github.lama591divine.exception.*;
 import com.github.lama591divine.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,14 @@ public class UserService {
 
     private final UserDao   userDao;
     private final DtoMapper mapper;
+    private final ApplicationEventPublisher events;
 
-    public void create(String login, String name, Integer age, Gender gender, HairColor hairColor) {
-        userDao.save(new User(login, name, age, gender, hairColor));
+    public void create(String login, String name, Integer age,
+                       Gender gender, HairColor hairColor) {
+        User u = userDao.save(new User(login, name, age, gender, hairColor));
+
+        events.publishEvent(new UserDomainEvent(
+                login, "CREATED", mapper.toDto(u)));
     }
 
     @Transactional(readOnly = true)
@@ -49,16 +56,14 @@ public class UserService {
     }
 
     private void manageFriendship(String u1, String u2, boolean add) {
-        User user = find(u1);
+        User user   = find(u1);
         User friend = find(u2);
 
-        if (add) {
-            user.addFriend(friend);
-        }
-        else {
-            user.removeFriend(friend);
-        }
+        if (add) user.addFriend(friend); else user.removeFriend(friend);
 
         userDao.save(user);
+
+        events.publishEvent(new UserDomainEvent(
+                u1, add ? "FRIEND_ADDED" : "FRIEND_REMOVED", mapper.toDto(user)));
     }
 }
